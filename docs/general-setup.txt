@@ -1,0 +1,126 @@
+I am building a drone that can carry a raspberry pi and a camera.   I am using a qwinout f450 drone frame, 4 a2212 1000kv brushless outrunner motors with mounts, 4 3A ESC speed controllers, an 11.1v 20c 2200mah lipo battery, a 5v ubec voltage regulator, 4 tarot 1045 5mm propeller blades, a navio2 autopilot pi hat, a frsky taranis x8r 2.4ghz receiver with a frsky taranis x9 lite transmitter, and Sik 915mhz 3dr500mw telemetry, and a raspberry pi 4 8gb.  Give me a draft of a wiring diagram to connect all the components.  How do I configure the raspberry pi to use with ardupilot?  How do I setup a telemetry radio?  How do I set up mission planner on windows to connect to the drone?
+
+
+ChatGPT said:
+Updated saved memory
+Here’s a full guide covering:
+
+Wiring diagram (draft layout)
+
+Raspberry Pi and ArduPilot setup
+
+SiK telemetry radio configuration
+
+Mission Planner setup on Windows
+
+🛠 1. Wiring Diagram (Text-Based Draft)
+text
+Copy
+Edit
+LiPo Battery (11.1V 3S 2200mAh)
+├── Power input to PDB (Power Distribution Board or soldering hub)
+│   ├── ESC #1 → Motor #1
+│   ├── ESC #2 → Motor #2
+│   ├── ESC #3 → Motor #3
+│   └── ESC #4 → Motor #4
+│
+├── 5V UBEC → Navio2 + Raspberry Pi (via GPIO header or USB if regulated)
+│
+├── Navio2 connected directly on top of Raspberry Pi GPIO
+│
+├── ESC signal wires → Navio2 servo rail (CH1–CH4)
+│
+├── FrSky X8R Receiver → Navio2 via SBUS (connected to Navio2's RC IN port)
+│
+├── SiK Telemetry Radio:
+│   ├── Radio #1 (air unit): connected to Raspberry Pi via USB
+│   └── Radio #2 (ground unit): connected to Mission Planner PC via USB
+│
+└── Camera → Raspberry Pi (via CSI ribbon or USB)
+Navio2 Notes:
+
+GPS, IMU, barometer, compass, and PWM rail are built-in.
+
+Power the Navio2 + Pi reliably via UBEC into the servo rail (5V, GND), not from ESCs.
+
+🧠 2. Set Up Raspberry Pi with Navio2 and ArduPilot
+Install Raspberry Pi OS (Lite preferred)
+
+Download Raspberry Pi OS
+
+Flash using Balena Etcher or Raspberry Pi Imager
+
+Update and prepare system
+
+bash
+Copy
+Edit
+sudo apt update && sudo apt upgrade -y
+sudo apt install git
+Clone and build ArduPilot (Navio2 version)
+
+bash
+Copy
+Edit
+git clone https://github.com/ArduPilot/ardupilot.git
+cd ardupilot
+git submodule update --init --recursive
+./waf configure --board=navio2
+./waf copter
+Run ArduCopter
+
+bash
+Copy
+Edit
+sudo ./build/navio2/bin/arducopter -A udp:192.168.1.XX:14550
+Replace 192.168.1.XX with the IP of the Windows PC running Mission Planner (or use /dev/serial0 if using USB telemetry instead).
+
+📡 3. Set Up SiK 915MHz Telemetry Radios
+Air Side (Pi):
+
+Plug in the SiK radio to Pi via USB
+
+Identify serial port:
+
+bash
+Copy
+Edit
+ls /dev/serial/by-id/
+Launch ArduPilot with serial option:
+
+bash
+Copy
+Edit
+sudo ./build/navio2/bin/arducopter -A /dev/ttyUSB0:57600
+Ground Side (Windows):
+
+Plug the USB SiK telemetry radio
+
+Check COM port in Device Manager
+
+No need to configure if pre-paired; otherwise use [Mission Planner > Initial Setup > Optional Hardware > SiK Radio] to match settings:
+
+Baud rate: 57600
+
+Net ID: same on both ends (default is 25)
+
+🖥️ 4. Connect Mission Planner on Windows
+Download Mission Planner
+
+Open Mission Planner
+
+Select COM port and baud 57600 if using USB telemetry
+
+Click “Connect”
+
+For UDP (if sending over Wi-Fi or LAN): choose UDP and port 14550
+
+Once connected:
+
+Calibrate accelerometers, radio, and compass
+
+Setup flight modes
+
+Upload parameters if needed
+
+Would you like a graphical wiring diagram PDF next? I can generate one for printing or prototyping.
