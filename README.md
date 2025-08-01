@@ -14,7 +14,7 @@ OpenNISDK
 mkdir OpenNISDK
 
 # on Windows command prompt
-scp -r d:/orbbec-astra/OpenNI_2.3.0.63/Linux/OpenNI-Linux-Arm-2.3.0.63 pi@navio.local:~/OpenNISDK/
+scp -r d:/orbbec-astra/OpenNI_2.3.0.63/Linux/OpenNI-Linux-Arm-2.3.0.63 pi@dronetest.local:~/OpenNISDK/
 ```
 
 > install OpenNI system-wide on Raspberry Pi
