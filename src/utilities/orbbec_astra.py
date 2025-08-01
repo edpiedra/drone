@@ -39,7 +39,10 @@ class Astra:
         
         openni2.unload()
         
-    def get_depth_frame(self):
+    def get_depth_frame(self) -> cv2.Mat:
+        '''
+        Returns a 2D depth frame.
+        '''
         frame = self.depth_stream.read_frame()
         frame_data = frame.get_buffer_as_uint16()
         img = np.frombuffer(frame_data, dtype=np.uint16) 
@@ -49,7 +52,10 @@ class Astra:
         
         return img
     
-    def get_color_frame(self):
+    def get_color_frame(self) -> cv2.Mat:
+        '''
+        Returns and RGB frame.
+        '''
         frame = self.color_stream.read_frame()
         frame_data = frame.get_buffer_as_uint8()
         img = np.frombuffer(frame_data, dtype=np.uint8) 

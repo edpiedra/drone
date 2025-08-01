@@ -1,6 +1,3 @@
 openni
-#opencv-python-headless
+#opencv-python
 pandas
-#tensorflow
-tflite-runtime
-face-detection-tflite

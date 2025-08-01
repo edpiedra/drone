@@ -52,3 +52,13 @@ Install OpenCV system-wide
 ```
 sudo apt install -y python3-opencv
 ```
+
+TFLite + SSD MobileNet V2 for 'person' detection
+-----------------------------------------------------------------
+> download TFLite model on Raspberry Pi
+```
+cd ~/drone
+mkdir models && cd models
+wget https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/object_detection/lite-model_ssd_mobilenet_v2_fpnlite_320x320_1.tflite
+```
+
