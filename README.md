@@ -47,3 +47,8 @@ cd Bin/Arm-Release
 ./SimpleRead
 ```
 
+Install OpenCV system-wide
+---------------------------------------------------------
+```
+sudo apt install -y python3-opencv
+```
