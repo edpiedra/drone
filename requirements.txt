@@ -1,5 +1,5 @@
 openni
-opencv-python
+opencv-python-headless
 pandas
 #tensorflow
 tflite-runtime
