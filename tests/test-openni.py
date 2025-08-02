@@ -1,3 +1,6 @@
+'''
+Only if using RPi3 with OpenNISDK
+'''
 from openni import openni2
 openni2.initialize()
 dev = openni2.Device.open_any()

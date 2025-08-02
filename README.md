@@ -1,64 +1,44 @@
-DRONE ENVIRONMENT
+Drone build
 
-Update system packages
-------------------------------------------------------------------------------------------
+> image Raspian Bullseye 64-bit OS (with desktop if wanted)
+
+> install ArduPilot for Navio2
 ```
 sudo apt update && sudo apt -y dist-upgrade
+sudo apt install -y git
+cd ~
+sudo git clone https://github.com/edpiedra/drone.git
+chmod +x ./drone/install/setup_navio2.sh
+./drone/install/setup_navio2.sh --dual --force --verify
+sudo reboot
 ```
 
-OpenNISDK
-------------------------------------------------------------------------------------
-> copy OpenNI-Linux-Arm-2.3.0.63 from d:/orbbec-astra/OpenNI_2.3.0.63/Linux to ~/OpenNISDK
+> test ArduPilot
 ```
-# on Raspberry Pi
-mkdir OpenNISDK
-
-# on Windows command prompt
-scp -r d:/orbbec-astra/OpenNI_2.3.0.63/Linux/OpenNI-Linux-Arm-2.3.0.63 pi@dronetest.local:~/OpenNISDK/
+# adjust udp to ip address of machine running the ground control station (like Mission Planner)
+sudo ~/ardupilot/build/navio2/bin/arducopter -A udp:192.168.1.3:14550
 ```
 
-> install OpenNI system-wide on Raspberry Pi
+> install OrbbecSDK and pyorbbecsdk for Astra Mini S Pro
 ```
-sudo apt-get install -y build-essential freeglut3 freeglut3-dev
+cd ~
+chmod +x ./drone/install/setup_orbbec_astra.sh
+./drone/install/setup_orbbec_astra.sh
 
-ldconfig -p | grep libudev.so.1
-cd /lib/arm-linux-gnueabihf
-sudo ln -s libudev.so.x.x.x libudev.so.1
+# test sample
+cd ~/OrbbecSDK/build/bin
+./OBMultiStream
 
-cd ~/OpenNISDK/OpenNI-Linux-Arm-2.3.0.63
-sudo chmod 777 install.sh
-sudo ./install.sh
+sudo udevadm control --reload-rules && sudo udevadm trigger
+cd ~/pyorbbecsdk
+source venv/bin/activate
+python3 examples/depth_viewer.py
 
-# replug in the device for usb-register
-lsusb
-
-source OpenNIDevEnvironment
-```
-
-> build samples
-```
-cd Samples/SimpleRead
-make
 ```
 
-> run examples
+> install detection models
 ```
-cd Bin/Arm-Release
-./SimpleRead
+cd ~
+chmod +x ./drone/install/setup_detections.sh
+./drone/install/setup_detections.sh
 ```
-
-Install OpenCV system-wide
----------------------------------------------------------
-```
-sudo apt install -y python3-opencv
-```
-
-TFLite + SSD MobileNet V2 for 'person' detection
------------------------------------------------------------------
-> download TFLite model on Raspberry Pi
-```
-cd ~/drone
-mkdir models && cd models
-wget https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/object_detection/lite-model_ssd_mobilenet_v2_fpnlite_320x320_1.tflite
-```
-

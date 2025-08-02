@@ -3,7 +3,7 @@ from openni import _openni2 as c_api
 import cv2 
 import numpy as np
 
-class Astra:
+class AstraPi3:
     def __init__(self):
         self.width = 320
         self.height = 240

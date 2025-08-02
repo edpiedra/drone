@@ -1,3 +1,4 @@
-openni
-#opencv-python
-pandas
+#openni # only if using RPi3
+numpy
+tflite-runtime # only if using RPi4
+pyorbbecsdk file:/home/pi/pyorbbecsdk/dist/*.whl
