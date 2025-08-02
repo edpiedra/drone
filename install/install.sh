@@ -3,7 +3,7 @@
 set -e
 
 # configuration
-INSTALL_DIR="$HOME/drone/install"
+INSTALL_DIR="~/drone/install"
 NAVIO_INSTALL="$INSTALL_DIR/setup_navios2.sh"
 ASTRA_INSTALL="$INSTALL_DIR/setup_orbbec_astra.sh"
 DETECTIONS_INSTALL="$INSTALL_DIR/setup_detections.sh"
@@ -20,9 +20,9 @@ do
   esac
 done 
 
-cd "$HOME"
+cd ~
 
-if [ ! -d "$HOME/ardupilot" ] || [ "$FORCE" ]; then 
+if [ ! -d "~/ardupilot" ] || [ "$FORCE" ]; then 
   chmod +x "$NAVIO_INSTALL"
   "$NAVIO_INSTALL" --dual --force --verify
   read -p "ArduPilot installed.  Reboot now? (y/n): " RESP
@@ -31,12 +31,12 @@ if [ ! -d "$HOME/ardupilot" ] || [ "$FORCE" ]; then
   fi
 fi 
 
-if [ ! -d "$HOME/OrbbecSDK" ] || [ ! -d "$HOME/pyorbbecsdk" ] || [ "$FORCE" ]; then 
+if [ ! -d "~/OrbbecSDK" ] || [ ! -d "~/pyorbbecsdk" ] || [ "$FORCE" ]; then 
   chmod +x "$ASTRA_INSTALL"
   "$ASTRA_INSTALL"
 fi 
 
-if [ ! -d "$HOME/models" ] || [ "$DETECTIONS" ] || [ "$FORCE" ]; then 
+if [ ! -d "~/models" ] || [ "$DETECTIONS" ] || [ "$FORCE" ]; then 
   chmod +x "$DETECTIONS_INSTALL"
   "$DETECTIONS_INSTALL"
 fi 

@@ -14,8 +14,8 @@ sudo git clone https://github.com/edpiedra/drone.git
 > install all packages
 ```
 cd ~
-chmod +x ./drone/install/install.sh
-./drone/install/install.sh --force
+sudo chmod +x ./drone/install/install.sh
+sudo ./drone/install/install.sh --force
 ```
 
 > test ArduPilot
