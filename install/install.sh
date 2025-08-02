@@ -2,7 +2,7 @@
 
 set -e
 
-$ROOT="/home/pi"
+ROOT="/home/pi"
 
 # configuration
 INSTALL_DIR="$ROOT/drone/install"
