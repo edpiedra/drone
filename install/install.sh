@@ -6,7 +6,7 @@ ROOT="/home/pi"
 
 # configuration
 INSTALL_DIR="$ROOT/drone/install"
-NAVIO_INSTALL="$INSTALL_DIR/setup_navios2.sh"
+NAVIO_INSTALL="$INSTALL_DIR/setup_navio2.sh"
 ASTRA_INSTALL="$INSTALL_DIR/setup_orbbec_astra.sh"
 DETECTIONS_INSTALL="$INSTALL_DIR/setup_detections.sh"
 
