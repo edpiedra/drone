@@ -2,21 +2,49 @@ Drone build
 
 > image Raspian Bullseye 64-bit OS (with desktop if wanted)
 
-> install ArduPilot for Navio2
+> clone drone respository
 ```
 sudo apt update && sudo apt -y dist-upgrade
 sudo apt install -y git
 cd ~
 sudo git clone https://github.com/edpiedra/drone.git
-chmod +x ./drone/install/setup_navio2.sh
-./drone/install/setup_navio2.sh --dual --force --verify
-sudo reboot
+```
+
+# BASIC INSTALL
+> install all packages
+```
+cd ~
+chmod +x ./drone/install/install.sh
+./drone/install/install.sh --force
 ```
 
 > test ArduPilot
 ```
 # adjust udp to ip address of machine running the ground control station (like Mission Planner)
 sudo ~/ardupilot/build/navio2/bin/arducopter -A udp:192.168.1.3:14550
+```
+
+> test OrbbecSDK
+```
+cd ~/OrbbecSDK/build/bin
+./OBMultiStream
+```
+
+> test pyorbbecsdk
+```
+cd ~/pyorbbecsdk
+source venv/bin/activate
+python3 examples/depth_viewer.py
+```
+
+
+# INDIVIDUAL INSTALLS
+> install ArduPilot for Navio2
+```
+cd ~
+chmod +x ./drone/install/setup_navio2.sh
+./drone/install/setup_navio2.sh --dual --force --verify
+sudo reboot
 ```
 
 > install OrbbecSDK and pyorbbecsdk for Astra Mini S Pro
