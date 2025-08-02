@@ -2,8 +2,10 @@
 
 set -e
 
+$ROOT = "/home/pi"
+
 # configuration
-INSTALL_DIR="~/drone/install"
+INSTALL_DIR="$ROOT/drone/install"
 NAVIO_INSTALL="$INSTALL_DIR/setup_navios2.sh"
 ASTRA_INSTALL="$INSTALL_DIR/setup_orbbec_astra.sh"
 DETECTIONS_INSTALL="$INSTALL_DIR/setup_detections.sh"
@@ -22,7 +24,7 @@ done
 
 cd ~
 
-if [ ! -d "~/ardupilot" ] || [ "$FORCE" ]; then 
+if [ ! -d "$ROOT/ardupilot" ] || [ "$FORCE" ]; then 
   chmod +x "$NAVIO_INSTALL"
   "$NAVIO_INSTALL" --dual --force --verify
   read -p "ArduPilot installed.  Reboot now? (y/n): " RESP
@@ -31,12 +33,12 @@ if [ ! -d "~/ardupilot" ] || [ "$FORCE" ]; then
   fi
 fi 
 
-if [ ! -d "~/OrbbecSDK" ] || [ ! -d "~/pyorbbecsdk" ] || [ "$FORCE" ]; then 
+if [ ! -d "$ROOT/OrbbecSDK" ] || [ ! -d "$ROOT/pyorbbecsdk" ] || [ "$FORCE" ]; then 
   chmod +x "$ASTRA_INSTALL"
   "$ASTRA_INSTALL"
 fi 
 
-if [ ! -d "~/models" ] || [ "$DETECTIONS" ] || [ "$FORCE" ]; then 
+if [ ! -d "$ROOT/models" ] || [ "$DETECTIONS" ] || [ "$FORCE" ]; then 
   chmod +x "$DETECTIONS_INSTALL"
   "$DETECTIONS_INSTALL"
 fi 
