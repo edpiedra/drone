@@ -25,8 +25,8 @@ done
 cd ~
 
 if [ ! -d "$ROOT/ardupilot" ] || [ "$FORCE" ]; then 
-  chmod +x "$NAVIO_INSTALL"
-  "$NAVIO_INSTALL" --dual --force --verify
+  sudo chmod +x "$NAVIO_INSTALL"
+  sudo "$NAVIO_INSTALL" --dual --force --verify
   read -p "ArduPilot installed.  Reboot now? (y/n): " RESP
   if [[ "$RESP" =~ ^[Yy]$ ]]; then
     sudo reboot
@@ -34,12 +34,12 @@ if [ ! -d "$ROOT/ardupilot" ] || [ "$FORCE" ]; then
 fi 
 
 if [ ! -d "$ROOT/OrbbecSDK" ] || [ ! -d "$ROOT/pyorbbecsdk" ] || [ "$FORCE" ]; then 
-  chmod +x "$ASTRA_INSTALL"
-  "$ASTRA_INSTALL"
+  sudo chmod +x "$ASTRA_INSTALL"
+  sudo "$ASTRA_INSTALL"
 fi 
 
 if [ ! -d "$ROOT/models" ] || [ "$DETECTIONS" ] || [ "$FORCE" ]; then 
-  chmod +x "$DETECTIONS_INSTALL"
-  "$DETECTIONS_INSTALL"
+  sudo chmod +x "$DETECTIONS_INSTALL"
+  sudo "$DETECTIONS_INSTALL"
 fi 
 
