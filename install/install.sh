@@ -12,6 +12,8 @@ DETECTIONS_INSTALL="$INSTALL_DIR/setup_detections.sh"
 
 # parse flags
 FORCE=false
+ARDUPILOT=false
+ASTRA=false
 DETECTIONS=false
 
 for arg in "$@"
@@ -19,12 +21,14 @@ do
   case $arg in 
     --force) FORCE=true;;
     --detections) DETECTIONS=true;;
+    --astra) ASTRA=true;;
+    --ardupilot) ARDUPILOT=true;;
   esac
 done 
 
 cd ~
 
-if [ ! -d "$ROOT/ardupilot" ] || [ "$FORCE" ]; then 
+if [ ! -d "$ROOT/ardupilot" ] || [ "$FORCE" ] || [ "$ARDUPILOT"]; then 
   sudo chmod +x "$NAVIO_INSTALL"
   sudo "$NAVIO_INSTALL" --dual --force --verify
   read -p "ArduPilot installed.  Reboot now? (y/n): " RESP
@@ -33,7 +37,7 @@ if [ ! -d "$ROOT/ardupilot" ] || [ "$FORCE" ]; then
   fi
 fi 
 
-if [ ! -d "$ROOT/OrbbecSDK" ] || [ ! -d "$ROOT/pyorbbecsdk" ] || [ "$FORCE" ]; then 
+if [ ! -d "$ROOT/OrbbecSDK" ] || [ ! -d "$ROOT/pyorbbecsdk" ] || [ "$FORCE" ] || [ "$ASTRA" ]; then 
   sudo chmod +x "$ASTRA_INSTALL"
   sudo "$ASTRA_INSTALL"
 fi 

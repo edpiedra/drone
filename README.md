@@ -15,9 +15,14 @@ sudo git clone https://github.com/edpiedra/drone.git
 ```
 cd ~
 sudo chmod +x ./drone/install/install.sh
+
 sudo ./drone/install/install.sh --force
+# args: --force : full install/re-install of all packages
+#       --ardupilot : re-install ArduPilot
+#       --detections : re-install detections
 ```
 
+# TESTING INSTALLATIONS
 > test ArduPilot
 ```
 # adjust udp to ip address of machine running the ground control station (like Mission Planner)
@@ -37,8 +42,12 @@ source venv/bin/activate
 python3 examples/depth_viewer.py
 ```
 
+# UPDATING DETECTION MODELS
+```
+sudo ./drone/install/install.sh --detections
+```
 
-# INDIVIDUAL INSTALLS
+# INDIVIDUAL PACKAGE INSTALLS
 > install ArduPilot for Navio2
 ```
 cd ~
