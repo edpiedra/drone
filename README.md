@@ -23,10 +23,14 @@ sudo git pull origin
 cd ~
 sudo chmod +x ./drone/install/install.sh
 
-sudo ./drone/install/install.sh --force
-# args: --force : full install/re-install of all packages
+sudo ./drone/install/install.sh
+# args: --force : full re-install of all packages
 #       --ardupilot : re-install ArduPilot
 #       --detections : re-install detections
+
+# Navio2 install will require a reboot after building kernel (step 4 of 10)
+# restart install once rebooted.
+sudo ./drone/install/install.sh
 ```
 
 # TESTING INSTALLATIONS

@@ -43,13 +43,14 @@ do
       FORCE_CLONE=1
       ;;
   esac
+  shift
 done
 
 cd "$HOME"
-echo "[ 0/10] Navio2: Starting setup from \$PWD"
+echo "[ 0/11] Navio2: Starting setup from \$PWD"
 
 # === Step 1: Install prerequisites ===
-echo "[ 1/10] Navio2: Installing dependencies..."
+echo "[ 1/11] Navio2: Installing dependencies..."
 sudo dpkg --add-architecture armhf
 sudo apt update
 sudo apt install -y \
@@ -67,19 +68,28 @@ if [ ! -f "/lib/ld-linux-armhf.so.3" ]; then
     fi
 fi
 
-# === Step 2: Clone Emlid kernel source ===
-echo "[ 2/10] Navio2: Cloning Emlid linux-rt-rpi..."
+# === Step 2: Ensure kernel headers are installed ===
+echo "[ 2/11] Navio2: Checking for kernel headers..."
+if [ ! -d "/lib/modules/$(uname -r)/build" ]; then
+    echo "→ Kernel headers missing. Installing matching headers..."
+    sudo apt install -y raspberrypi-kernel-headers
+else
+    echo "→ Kernel headers present."
+fi
+
+# === Step 3: Clone Emlid kernel source ===
 if [ ! -d linux-rt-rpi ]; then
+  echo "[ 3/11] Navio2: Cloning Emlid linux-rt-rpi.  This can take a while..."
   git clone "$LINUX_REPO"
   cd linux-rt-rpi
   git checkout "$KERNEL_BRANCH" || { echo "Branch $KERNEL_BRANCH not found"; exit 1; }
   cd ..
 else
-  echo "linux-rt-rpi already exists. Skipping."
+  echo "[ 3/11] Navio2: linux-rt-rpi already exists. Skipping."
 fi
 
-# === Step 3: Patch kernel if not on 5.10.11-navio ===
-echo "[ 3/10] Navio2: Patching kernel if needed..."
+# === Step 4: Patch kernel if not on 5.10.11-navio ===
+echo "[ 4/11] Navio2: Patching kernel if needed..."
 if [ "$KERNEL_BRANCH" != "rpi-5.10.11-navio" ]; then
   if [ ! -f navio2.patch ]; then
     wget https://gist.githubusercontent.com/cchen140/07159b29a21be929b545ad6c268ef3cc/raw/navio2-4.19.83.patch -O navio2.patch
@@ -89,8 +99,8 @@ else
   echo "Skipping patch for $KERNEL_BRANCH"
 fi
 
-# === Step 4: Build and install kernel ===
-echo "[ 4/10] Navio2: Building kernel..."
+# === Step 5: Build and install kernel ===
+echo "[ 5/11] Navio2: Building kernel..."
 cd linux-rt-rpi
 if [ ! -f .config ]; then
   make bcm2711_defconfig
@@ -104,8 +114,8 @@ if [ ! -f .config ]; then
 fi
 cd ..
 
-# === Step 5: Install RCIO DKMS module ===
-echo "[ 5/10] Navio2: Installing Navio2 kernel modules..."
+# === Step 6: Install RCIO DKMS module ===
+echo "[ 6/11] Navio2: Installing Navio2 kernel modules..."
 if [ ! -d "$HOME/rcio-dkms" ] || [ ! -f "$HOME/rcio-dkms/src/Makefile" ]; then
     echo "Cloning RCIO DKMS repository..."
     rm -rf "$HOME/rcio-dkms"
@@ -124,14 +134,14 @@ make
 sudo make install
 cd "$HOME"
 
-# === Step 6: Create overlays if needed ===
-echo "[ 6/10] Navio2: Creating overlays..."
+# === Step 7: Create overlays if needed ===
+echo "[ 7/11] Navio2: Creating overlays..."
 mkdir -p overlays && cd overlays
 echo "→ overlays step placeholder"
 cd "$HOME"
 
-# === Step 7: Clone ArduPilot ===
-echo "[ 7/10] Navio2: Checking ArduPilot source..."
+# === Step 8: Clone ArduPilot ===
+echo "[ 8/11] Navio2: Checking ArduPilot source..."
 if [ "$FORCE_CLONE" -eq 1 ]; then
   rm -rf ardupilot
 fi
@@ -140,8 +150,8 @@ if [ ! -d ardupilot ]; then
 fi
 cd ardupilot
 
-# === Step 8: Install Python requirements ===
-echo "[ 8/10] Navio2: Installing Python requirements..."
+# === Step 9: Install Python requirements ===
+echo "[ 9/11] Navio2: Installing Python requirements..."
 if [ -f Tools/requirements.txt ]; then
   pip3 install --user -r Tools/requirements.txt || true
 else
@@ -149,8 +159,8 @@ else
   pip3 install --user future pymavlink MAVProxy
 fi
 
-# === Step 9: Build ArduPilot ===
-echo "[ 9/10] Navio2: Building ArduPilot..."
+# === Step 10: Build ArduPilot ===
+echo "[10/11] Navio2: Building ArduPilot..."
 if [ "$BUILD_64" -eq 1 ]; then
   echo "→ Building 64-bit ArduPilot..."
   ./waf configure --board=navio2 --toolchain=native
@@ -164,8 +174,8 @@ if [ "$BUILD_32" -eq 1 ]; then
   ./waf copter
 fi
 
-# === Step 10: Post-build summary ===
-echo "[10/10] Navio2: Post-build summary:"
+# === Step 11: Post-build summary ===
+echo "[11/11] Navio2: Post-build summary:"
 if [ -f "$HOME/ardupilot/build/navio2/bin/arducopter" ]; then
   echo "✅ Testing 32-bit ArduPilot binary: $HOME/ardupilot/build/navio2/bin/arducopter"
   file "$HOME/ardupilot/build/navio2/bin/arducopter"
@@ -182,7 +192,7 @@ else
   echo "❌ 64-bit ArduPilot binary missing"
 fi
 
-# === Step 11: Verification ===
+# === Step 12: Verification ===
 if [ "$VERIFY_ONLY" -eq 1 ]; then
   echo "→ Running post-setup verification..."
   file "$HOME/ardupilot/build/navio2/bin/arducopter" || true
