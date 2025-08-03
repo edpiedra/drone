@@ -12,6 +12,14 @@ BODY_POSE_MODEL="https://tfhub.dev/google/lite-model/movenet/singlepose/lightnin
 BODY_POSE_FILE="movenet_lightning.zip"
 FACE_DETECT_DIR="$MODELS_DIR/face_detection"
 FACE_DETECT_MODEL="https://github.com/google/mediapipe/raw/master/mediapipe/models/face_detection_front.tflite"
+LOG_DIR="$HOME/drone/install/logs"
+
+if [ ! -d "$LOG_DIR" ]; then 
+  mkdir -p $LOG_DIR 
+fi
+BUILD_LOG="$LOG_DIR/setup_detections.log"
+
+exec > >(tee "$BUILD_LOG") 2>&1
 
 echo "===== Object Detection Setup Script ====="
 

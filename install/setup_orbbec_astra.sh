@@ -3,8 +3,16 @@
 set -e
 
 # configuration
-$ORBBECSDK_REPO="https://github.com/orbbec/OrbbecSDK.git"
-$PYORBBECSDK_REPO="https://github.com/orbbec/pyorbbecsdk.git"
+ORBBECSDK_REPO="https://github.com/orbbec/OrbbecSDK.git"
+PYORBBECSDK_REPO="https://github.com/orbbec/pyorbbecsdk.git"
+LOG_DIR="$HOME/drone/install/logs"
+
+if [ ! -d "$LOG_DIR" ]; then 
+  mkdir -p $LOG_DIR 
+fi
+BUILD_LOG="$LOG_DIR/setup_orbbec_astra.log"
+
+exec > >(tee "$BUILD_LOG") 2>&1
 
 # Always operate from the user's home directory
 cd "$HOME"

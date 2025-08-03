@@ -9,11 +9,18 @@ VERIFY_ONLY=0
 CLEANUP_RPIO=0
 FORCE_CLONE=0
 USE_DUAL=0
-INSTALL_DIR="$HOME"
 KERNEL_BRANCH="rpi-5.10.11-navio"
 LINUX_REPO="https://github.com/emlid/linux-rt-rpi.git"
 RCIO_REPO="https://github.com/emlid/rcio-dkms.git"
 ARDUPILOT_REPO="https://github.com/ArduPilot/ardupilot.git"
+LOG_DIR="$HOME/drone/install/logs"
+
+if [ ! -d "$LOG_DIR" ]; then 
+  mkdir -p $LOG_DIR 
+fi
+BUILD_LOG="$LOG_DIR/setup_navio2.log"
+
+exec > >(tee "$BUILD_LOG") 2>&1
 
 # === Parse Flags ===
 for arg in "$@"
@@ -158,14 +165,17 @@ fi
 # === Step 10: Post-build summary ===
 echo "[10/10] Navio2: Post-build summary:"
 if [ -f "$HOME/ardupilot/build/navio2/bin/arducopter" ]; then
-  echo "✅ 32-bit ArduPilot binary: $HOME/ardupilot/build/navio2/bin/arducopter"
+  echo "✅ Testing 32-bit ArduPilot binary: $HOME/ardupilot/build/navio2/bin/arducopter"
   file "$HOME/ardupilot/build/navio2/bin/arducopter"
+  "$HOME/ardupilot/build/navio2/bin/arducopter" --help >/dev/null || echo "[ERROR] Failed to run 32-bit binary"
 else
   echo "❌ 32-bit ArduPilot binary missing"
 fi
 if [ -f "$HOME/ardupilot/build/navio2-64/bin/arducopter-64" ]; then
-  echo "✅ 64-bit ArduPilot binary: $HOME/ardupilot/build/navio2-64/bin/arducopter-64"
+  echo "✅ Testing 64-bit ArduPilot binary: $HOME/ardupilot/build/navio2-64/bin/arducopter-64"
   file "$HOME/ardupilot/build/navio2-64/bin/arducopter-64"
+  "$HOME/ardupilot/build/navio2-64/bin/arducopter-64" --help >/dev/null || echo "[ERROR] Failed to run 64-bit binary"
+fi
 else
   echo "❌ 64-bit ArduPilot binary missing"
 fi

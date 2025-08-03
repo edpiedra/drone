@@ -10,6 +10,13 @@ cd ~
 sudo git clone https://github.com/edpiedra/drone.git
 ```
 
+> ===== to update local repository =====
+```
+cd ~/drone
+sudo git reset --hard
+sudo git pull origin
+```
+
 # BASIC INSTALL
 > install all packages
 ```
