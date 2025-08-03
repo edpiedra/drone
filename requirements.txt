@@ -1,4 +1,3 @@
-#openni # only if using RPi3
 numpy
-tflite-runtime # only if using RPi4
+tflite-runtime 
 pyorbbecsdk file:/home/pi/pyorbbecsdk/dist/*.whl

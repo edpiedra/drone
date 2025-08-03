@@ -1,10 +1,11 @@
 Drone build
 
-> image Raspian Bullseye 64-bit OS (with desktop if wanted)
+> image Raspian Bullseye 64-bit OS
+  > with desktop: 2023-05-03-raspios-bullseye-arm64.img.xz
 
 > clone drone respository
 ```
-sudo apt update && sudo apt -y dist-upgrade
+sudo apt update 
 sudo apt install -y git
 cd ~
 sudo git clone https://github.com/edpiedra/drone.git

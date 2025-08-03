@@ -44,7 +44,7 @@ do
   esac
 done 
 
-cd ~
+cd "$HOME"
 
 if [ ! -d "$HOME/ardupilot" ] || [ "$FORCE" ] || [ "$ARDUPILOT"]; then 
   sudo chmod +x "$NAVIO_INSTALL"
