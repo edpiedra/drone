@@ -2,6 +2,8 @@
 
 set -e
 
+HOME="/home/pi"
+
 # configuration
 ORBBECSDK_REPO="https://github.com/orbbec/OrbbecSDK.git"
 PYORBBECSDK_REPO="https://github.com/orbbec/pyorbbecsdk.git"

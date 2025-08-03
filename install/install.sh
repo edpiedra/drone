@@ -10,6 +10,8 @@
 
 set -e
 
+HOME="/home/pi"
+
 # configuration
 INSTALL_DIR="$HOME/drone/install"
 NAVIO_INSTALL="$INSTALL_DIR/setup_navio2.sh"

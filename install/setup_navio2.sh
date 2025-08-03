@@ -2,6 +2,8 @@
 
 set -e
 
+HOME="/home/pi"
+
 # === Config ===
 BUILD_32=0
 BUILD_64=0

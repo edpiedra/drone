@@ -2,6 +2,8 @@
 
 set -e
 
+HOME="/home/pi"
+
 # configuration
 MODELS_DIR="$HOME/models"
 PERSONS_DIR="$MODELS_DIR/person_detection"
