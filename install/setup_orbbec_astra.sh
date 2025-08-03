@@ -22,11 +22,11 @@ done
 echo "===== ObbecSDK and pyorbbecsdk Setup Script for Atra Mini S Pro ====="
 
 # STEP 1: Update system
-echo "[1/10] Updating system..."
+echo "[ 1/10] Astra: Updating system..."
 sudo apt update && sudo apt upgrade -y
 
 # STEP 2: Clone OrbbecSDK
-echo "[2/10] Checking for OrbbecSDK source..."
+echo "[ 2/10] Astra: Checking for OrbbecSDK source..."
 ORBBECSDK_DIR="$HOME/OrbbecSDK"
 
 if [ -d "$ORBBECSDK_DIR" ]; then 
@@ -37,14 +37,14 @@ fi
 git clone "$ORBBECSDK_REPO"
 
 # Step 3: Update udev rules
-echo "[3/10] Updating udev rules..."
+echo "[ 3/10] Astra: Updating udev rules..."
 cd "$ORBBECSDK_DIR/misc/scripts"
 sudo chmod +x ./install_udev_rules.sh
 sudo ./install_udev_rules.sh
 sudo udevadm control --reload && sudo udevadm trigger
 
 # Step 4: Build OrbbecSDK
-echo "[4/10] Building OrbbecSDK..."
+echo "[ 4/10] Astra: Building OrbbecSDK..."
 cd "$ORBBECSDK_DIR"
 mkdir "build"
 cd "build"
@@ -52,7 +52,7 @@ cmake ..
 cmake --build .--config Release
 
 # Step 5: Clone pyorbbecsdk
-echo "[5/10] Cloning pyorbbecsdk..."
+echo "[ 5/10] Astra: Cloning pyorbbecsdk..."
 PYORBBECSDK_DIR="$HOME/pyorbbecsdk"
 
 if [ -d "$PYORBBECSDK_DIR" ]; then 
@@ -64,11 +64,11 @@ cd "$HOME"
 git clone "$PYORBBECSDK_REPO" -b main
 
 # Step 6: Installing system packages
-echo "[6/10] Installing system packages..."
+echo "[ 6/10] Astra: Installing system packages..."
 sudo apt-get install python3-dev python3-venv python3-pip python3-opencv
 
 # Step 7: Build pyorbbecsdk
-echo "[7/10] Building pyorbbecsdk..."
+echo "[ 7/10] Astra: Building pyorbbecsdk..."
 
 cd "$PYORBBECSDK_DIR"
 python3 -m venv ./venv
@@ -84,14 +84,14 @@ pip3 install wheel
 python3 setup.py bdist_wheel
 
 # Step 8: Setup environment
-echo "[8/10] Setting Up Environment..."
+echo "[ 8/10] Astra: Setting Up Environment..."
 cd "$PYORBBECSDK_DIR"
 export PYTHONPATH=$PYTHONPATH:$(pwd)/install/lib/
 sudo bash ./scripts/install_udev_rules.sh
 sudo udevadm control --reload-rules && sudo udevadm trigger
 
 # Step 9: Generate Python stubs
-echo "[9/10] Generating Python Stubs..."
+echo "[ 9/10] Astra: Generating Python Stubs..."
 source env.sh
 pip3 install pybind11-stubgen
 pybind11-stubgen pyorbbecsdk
@@ -101,7 +101,7 @@ EXAMPLE_FILE="examples/depth_viewer.py"
 WHEEL_FILE="dist/*.whl"
 
 if [ "$VERIFY" = true ]; then
-  echo "[10/10] Verifying Files..."
+  echo "[10/10] Astra: Verifying Files..."
   if [ -f "$EXAMPLE_FILE" ]; then 
     file "$EXAMPLE_FILE"
   fi 
@@ -110,4 +110,5 @@ if [ "$VERIFY" = true ]; then
   fi   
 fi 
 
-echo "===== ✅ OrbbecSDK Setup Complete! =====
+echo "===== ✅ OrbbecSDK Setup Complete! ====="
+exit 0

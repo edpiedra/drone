@@ -47,3 +47,5 @@ if [ ! -d "$ROOT/models" ] || [ "$DETECTIONS" ] || [ "$FORCE" ]; then
   sudo "$DETECTIONS_INSTALL"
 fi 
 
+echo "✅ Setup complete. Use --verify to validate binaries or RCIO module."
+exit 0

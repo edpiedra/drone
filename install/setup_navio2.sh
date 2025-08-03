@@ -37,10 +37,10 @@ do
 done
 
 cd "$HOME"
-echo "[0/10] Starting setup from \$PWD"
+echo "[ 0/10] Navio2: Starting setup from \$PWD"
 
 # === Step 1: Install prerequisites ===
-echo "[1/10] Installing dependencies..."
+echo "[ 1/10] Navio2: Installing dependencies..."
 sudo dpkg --add-architecture armhf
 sudo apt update
 sudo apt install -y \
@@ -59,7 +59,7 @@ if [ ! -f "/lib/ld-linux-armhf.so.3" ]; then
 fi
 
 # === Step 2: Clone Emlid kernel source ===
-echo "[2/10] Cloning Emlid linux-rt-rpi..."
+echo "[ 2/10] Navio2: Cloning Emlid linux-rt-rpi..."
 if [ ! -d linux-rt-rpi ]; then
   git clone "$LINUX_REPO"
   cd linux-rt-rpi
@@ -70,7 +70,7 @@ else
 fi
 
 # === Step 3: Patch kernel if not on 5.10.11-navio ===
-echo "[3/10] Patching kernel if needed..."
+echo "[ 3/10] Navio2: Patching kernel if needed..."
 if [ "$KERNEL_BRANCH" != "rpi-5.10.11-navio" ]; then
   if [ ! -f navio2.patch ]; then
     wget https://gist.githubusercontent.com/cchen140/07159b29a21be929b545ad6c268ef3cc/raw/navio2-4.19.83.patch -O navio2.patch
@@ -81,23 +81,22 @@ else
 fi
 
 # === Step 4: Build and install kernel ===
-echo "[4/10] Building kernel..."
+echo "[ 4/10] Navio2: Building kernel..."
 cd linux-rt-rpi
 if [ ! -f .config ]; then
   make bcm2711_defconfig
+  make -j$(nproc)
+  sudo make modules_install
+  sudo make install
+  read -p "→ Kernel installed. Reboot now? (y/n): " RESP
+  if [[ "$RESP" =~ ^[Yy]$ ]]; then
+    sudo reboot
+  fi
 fi
-make -j$(nproc)
-sudo make modules_install
-sudo make install
 cd ..
 
-read -p "→ Kernel installed. Reboot now? (y/n): " RESP
-if [[ "$RESP" =~ ^[Yy]$ ]]; then
-  sudo reboot
-fi
-
 # === Step 5: Install RCIO DKMS module ===
-echo "[5/10] Installing Navio2 kernel modules..."
+echo "[ 5/10] Navio2: Installing Navio2 kernel modules..."
 if [ ! -d "$HOME/rcio-dkms" ] || [ ! -f "$HOME/rcio-dkms/src/Makefile" ]; then
     echo "Cloning RCIO DKMS repository..."
     rm -rf "$HOME/rcio-dkms"
@@ -117,13 +116,13 @@ sudo make install
 cd "$HOME"
 
 # === Step 6: Create overlays if needed ===
-echo "[6/10] Creating overlays..."
+echo "[ 6/10] Navio2: Creating overlays..."
 mkdir -p overlays && cd overlays
 echo "→ overlays step placeholder"
 cd "$HOME"
 
 # === Step 7: Clone ArduPilot ===
-echo "[7/10] Checking ArduPilot source..."
+echo "[ 7/10] Navio2: Checking ArduPilot source..."
 if [ "$FORCE_CLONE" -eq 1 ]; then
   rm -rf ardupilot
 fi
@@ -133,7 +132,7 @@ fi
 cd ardupilot
 
 # === Step 8: Install Python requirements ===
-echo "[8/10] Installing Python requirements..."
+echo "[ 8/10] Navio2: Installing Python requirements..."
 if [ -f Tools/requirements.txt ]; then
   pip3 install --user -r Tools/requirements.txt || true
 else
@@ -142,12 +141,7 @@ else
 fi
 
 # === Step 9: Build ArduPilot ===
-echo "[9/10] Building ArduPilot..."
-if [ "$BUILD_32" -eq 1 ]; then
-  echo "→ Building 32-bit ArduPilot..."
-  ./waf configure --board=navio2
-  ./waf copter
-fi
+echo "[ 9/10] Navio2: Building ArduPilot..."
 if [ "$BUILD_64" -eq 1 ]; then
   echo "→ Building 64-bit ArduPilot..."
   ./waf configure --board=navio2 --toolchain=native
@@ -155,9 +149,14 @@ if [ "$BUILD_64" -eq 1 ]; then
   mkdir -p build/navio2-64/bin
   cp build/navio2/bin/arducopter build/navio2-64/bin/arducopter-64
 fi
+if [ "$BUILD_32" -eq 1 ]; then
+  echo "→ Building 32-bit ArduPilot..."
+  ./waf configure --board=navio2
+  ./waf copter
+fi
 
 # === Step 10: Post-build summary ===
-echo "[10/10] Post-build summary:"
+echo "[10/10] Navio2: Post-build summary:"
 if [ -f "$HOME/ardupilot/build/navio2/bin/arducopter" ]; then
   echo "✅ 32-bit ArduPilot binary: $HOME/ardupilot/build/navio2/bin/arducopter"
   file "$HOME/ardupilot/build/navio2/bin/arducopter"

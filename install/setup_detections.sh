@@ -16,15 +16,15 @@ FACE_DETECT_MODEL="https://github.com/google/mediapipe/raw/master/mediapipe/mode
 echo "===== Object Detection Setup Script ====="
 
 # Step 1: Update and upgrade
-echo "[1/5] Updating system..."
+echo "[1/5] Detections: Updating system..."
 sudo apt update && sudo apt upgrade -y
 
 # Step 2: Install system dependencies
-echo "[2/5] Installing System Dependencies..."
+echo "[2/5] Detections: Installing System Dependencies..."
 sudo apt install -y python3-pip python3-opencv libatlas-base-dev python3-venv
 
 # Step 3: Download TFLite SSD MobileNet V2 model for person detection
-echo "[3/5] Downloading Person Detection..."
+echo "[3/5] Detections: Downloading Person Detection..."
 
 if [ -d "$PERSONS_DIR" ]; then 
   echo "removing $PERSONS_DIR ..."
@@ -38,7 +38,7 @@ unzip "$COCO_FILE"
 mv detect.tflite ssd_mobilenet_v2.tflite
 
 # Step 4: Download MoveNet Lightning model (TFLite format)
-echo "[4/5] Downloading Body Pose..."
+echo "[4/5] Detections: Downloading Body Pose..."
 
 if [ -d "$BODY_POSE_DIR" ]; then 
   echo "removing $BODY_POSE_DIR ..."
@@ -51,7 +51,7 @@ wget "$BODY_POSE_MODEL" -O "$BODY_POSE_FILE"
 unzip "$BODY_POSE_FILE"
 
 # Step 5: Download FDLite face detection model
-echo "[5/5] Downloading Face Detection..."
+echo "[5/5] Detections: Downloading Face Detection..."
 
 if [ -d "$FACE_DETECT_DIR" ]; then 
   echo "removing $FACE_DETECT_DIR ..."
@@ -64,3 +64,4 @@ wget "$FACE_DETECT_MODEL"
 
 
 echo "Virtual environment created and packages installed. Models downloaded."
+exit 0
